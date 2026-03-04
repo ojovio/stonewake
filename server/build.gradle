@@ -1,0 +1,42 @@
+apply plugin: 'application'
+
+
+java.sourceCompatibility = 8
+java.targetCompatibility = 8
+if (JavaVersion.current().isJava9Compatible()) {
+        compileJava.options.release.set(8)
+}
+
+application.mainClass = 'dev.stonewake.server.ServerLauncher'
+application.applicationName = appName
+eclipse.project.name = appName + '-server'
+
+dependencies {
+
+}
+
+jar {
+  archiveBaseName.set(appName)
+// the duplicatesStrategy matters starting in Gradle 7.0; this setting works.
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  dependsOn configurations.runtimeClasspath
+  from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+// these "exclude" lines remove some unnecessary duplicate files in the output JAR.
+  exclude('META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
+  dependencies {
+    exclude('META-INF/INDEX.LIST', 'META-INF/maven/**')
+  }
+// setting the manifest makes the JAR runnable.
+// enabling native access helps avoid a warning when Java 24 or later runs the JAR.
+  manifest {
+    attributes 'Main-Class': application.mainClass, 'Enable-Native-Access': 'ALL-UNNAMED'
+  }
+// this last step may help on some OSes that need extra instruction to make runnable JARs.
+  doLast {
+    file(archiveFile).setExecutable(true, false)
+  }
+}
+
+// Equivalent to the jar task; here for compatibility with gdx-setup.
+task dist(dependsOn: [jar]) {
+}
