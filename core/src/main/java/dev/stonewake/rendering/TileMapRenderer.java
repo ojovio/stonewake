@@ -7,6 +7,7 @@ import dev.stonewake.assets.TextureManager;
 import dev.stonewake.assets.TileAssetManager;
 import dev.stonewake.tiles.Tile;
 import dev.stonewake.tiles.TileMap;
+import dev.stonewake.utils.TileUtils;
 
 public class TileMapRenderer {
     public void renderOnce(Game game, TileMap tileMap, int startX, int endX, int startY, int endY) {
@@ -29,9 +30,9 @@ public class TileMapRenderer {
 
                     int tileSize = tileMap.getTileSize();
                     Texture tileTexture = tile.tileType.getTileTexture();
-                    int tileSpriteIndex = tile.tileType.getTileSpriteIndex(tileAssetManager, tile);
-                    int tileSpriteX = tileAssetManager.decodifyTileSpriteIndexX(tileSpriteIndex, tileTexture);
-                    int tileSpriteY = tileAssetManager.decodifyTileSpriteIndexY(tileSpriteIndex, tileTexture);
+                    int tileSpriteIndex = tile.tileType.getTileSpriteIndex(tile, tileSize);
+                    int tileSpriteX = TileUtils.decodifyTileSpriteIndexX(tileSpriteIndex, tileTexture, tileSize);
+                    int tileSpriteY = TileUtils.decodifyTileSpriteIndexY(tileSpriteIndex, tileTexture, tileSize);
                     spriteBatch.draw(
                         tileTexture,
                         x * tileSize,
