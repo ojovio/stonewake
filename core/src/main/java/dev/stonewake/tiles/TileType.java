@@ -28,7 +28,14 @@ public abstract class TileType {
     }
 
     public int getTileSpriteIndex(BitMask bitMask, Tile occupiedTile, int tileSize) {
-        return autoTiler.getTileSpriteIndex(bitMask, occupiedTile, tileSize);
+        if (!occupiedTile.isSpriteIndexDirty()) {
+            return occupiedTile.getCachedSpriteIndex();
+        }
+        int spriteIndex = autoTiler.getTileSpriteIndex(bitMask, occupiedTile, tileSize);
+        occupiedTile.clearDirtySpriteIndex();
+        occupiedTile.cacheSpriteIndex(spriteIndex);
+
+        return spriteIndex;
     }
 
     public void loadTileTexture(Texture texture) {

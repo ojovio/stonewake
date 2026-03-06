@@ -44,10 +44,86 @@ public class TileMap {
         return tiles[idx];
     }
 
-    public void setTileAt(int tileLayer, int tileX, int tileY, int tileId) {
+    public void setTile(int tileLayer, int tileX, int tileY, int tileId) {
+        if (!isTileOnBounds(tileLayer, tileX, tileY)) return;
+
         int idx = tileX + tileY * tileMapWidth + tileLayer * tileMapWidth * tileMapHeight;
 
+        updateTile(tiles[idx]);
+
         tiles[idx].tileType = tileRegistry.getTileType(tileId);
+    }
+
+    public void clearTile(int tileLayer, int tileX, int tileY) {
+        if (!isTileOnBounds(tileLayer, tileX, tileY)) return;
+
+        int idx = tileX + tileY * tileMapWidth + tileLayer * tileMapWidth * tileMapHeight;
+
+        updateTile(tiles[idx]);
+
+        tiles[idx].tileType = null;
+    }
+
+    public void fillTiles(int tileLayer, int startX, int endX, int startY, int endY, int tileId) {
+        for (int x = startX; x <= endX; x++) {
+            for (int y = startY; y <= endY; y++) {
+                if (!isTileOnBounds(tileLayer, x, y)) continue;
+
+                int idx = x + y * tileMapWidth + tileLayer * tileMapWidth * tileMapHeight;
+
+                tiles[idx].tileType = tileRegistry.getTileType(tileId);
+            }
+        }
+
+        updateTiles(tileLayer, startX, startY, endX, endY);
+    }
+
+    public void clearTiles(int tileLayer, int startX, int startY, int endX, int endY) {
+        for (int x = startX; x <= endX; x++) {
+            for (int y = startY; y <= endY; y++) {
+                if (!isTileOnBounds(tileLayer, x, y)) continue;
+
+                int idx = x + y * tileMapWidth + tileLayer * tileMapWidth * tileMapHeight;
+
+                tiles[idx].tileType = null;
+            }
+        }
+
+        updateTiles(tileLayer, startX, startY, endX, endY);
+    }
+
+    private void updateTiles(int tileLayer, int startX, int startY, int endX, int endY) {
+        for (int x = startX; x <= endX; x++) {
+            for (int y = startY; y <= endY; y++) {
+                if (!isTileOnBounds(tileLayer, x, y)) continue;
+
+                int idx = x + y * tileMapWidth + tileLayer * tileMapWidth * tileMapHeight;
+
+                updateTile(tiles[idx]);
+            }
+        }
+    }
+
+    public void updateTile(Tile tile) {
+        tile.markDirtyBitMask();
+        tile.markDirtySpriteIndex();
+
+        for (int layer = 0; layer < tileMapLayersCount; layer++) {
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    if (x == 0 && y == 0 && layer == 0) continue;
+
+                    int dx = tile.getTileX() + x;
+                    int dy = tile.getTileY() - y;
+
+                    if (!isTileOnBounds(layer, dx, dy)) continue;
+
+                    Tile neighbor = tiles[dx + dy * tileMapWidth + layer * tileMapWidth * tileMapHeight];
+                    neighbor.markDirtySpriteIndex();
+                    neighbor.markDirtyBitMask();
+                }
+            }
+        }
     }
 
     public int getTileMapLayersCount() {

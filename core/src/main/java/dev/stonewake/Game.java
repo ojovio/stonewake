@@ -38,11 +38,8 @@ public class Game {
 
         assetManager.loadAllAssets(this);
 
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
-                tileMap.setTileAt(0, i, j, 0);
-            }
-        }
+        tileMap.fillTiles(0, 0, 15, 0, 15, 0);
+        tileMap.clearTile(0, 5, 5);
     }
 
     public void input() {
