@@ -28,11 +28,11 @@ public abstract class TileType {
     }
 
     public int getTileSpriteIndex(BitMask bitMask, Tile occupiedTile, int tileSize) {
-        if (!occupiedTile.isSpriteIndexDirty()) {
+        if (!occupiedTile.isTileDirty()) {
             return occupiedTile.getCachedSpriteIndex();
         }
         int spriteIndex = autoTiler.getTileSpriteIndex(bitMask, occupiedTile, tileSize);
-        occupiedTile.clearDirtySpriteIndex();
+        occupiedTile.clearDirtyTile();
         occupiedTile.cacheSpriteIndex(spriteIndex);
 
         return spriteIndex;

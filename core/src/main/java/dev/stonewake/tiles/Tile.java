@@ -4,10 +4,8 @@ public class Tile {
     private int tileLayer;
     private int tileX;
     private int tileY;
-    private boolean dirtyBitMask;
     private boolean dirtySpriteIndex;
     private int cachedSpriteIndex = 0;
-    private int cachedBitMask = 0;
     public TileType tileType;
 
     public Tile(int tileLayer, int tileX, int tileY) {
@@ -36,40 +34,20 @@ public class Tile {
         return tileType == null;
     }
 
-    public boolean isBitMaskDirty() {
-        return dirtyBitMask;
-    }
-
-    public boolean isSpriteIndexDirty() {
+    public boolean isTileDirty() {
         return dirtySpriteIndex;
     }
 
-    public void markDirtyBitMask() {
-        dirtyBitMask = true;
-    }
-
-    public void markDirtySpriteIndex() {
+    public void markTileDirty() {
         dirtySpriteIndex = true;
     }
 
-    public void clearDirtyBitMask() {
-        dirtyBitMask = false;
-    }
-
-    public void clearDirtySpriteIndex() {
+    public void clearDirtyTile() {
         dirtySpriteIndex = false;
-    }
-
-    public int getCachedBitMask() {
-        return cachedBitMask;
     }
 
     public int getCachedSpriteIndex() {
         return cachedSpriteIndex;
-    }
-
-    public void cacheBitMask(int bitMask) {
-        cachedBitMask = bitMask;
     }
 
     public void cacheSpriteIndex(int spriteIndex) {

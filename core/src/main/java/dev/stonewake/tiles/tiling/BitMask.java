@@ -24,10 +24,6 @@ public class BitMask {
     public int calculateBitMask(Tile tile, int layer, boolean considerWorldBorders, Predicate<Tile> condition) {
         int mask = 0;
 
-        if (!tile.isBitMaskDirty()) {
-            return tile.getCachedBitMask();
-        }
-
         for (int y = -1; y <= 1; y++) {
             for (int x = -1; x <= 1; x++) {
 
@@ -52,9 +48,6 @@ public class BitMask {
                 }
             }
         }
-
-        tile.clearDirtyBitMask();
-        tile.cacheBitMask(mask);
 
         return mask;
     }

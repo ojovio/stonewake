@@ -105,8 +105,7 @@ public class TileMap {
     }
 
     public void updateTile(Tile tile) {
-        tile.markDirtyBitMask();
-        tile.markDirtySpriteIndex();
+        tile.markTileDirty();
 
         for (int layer = 0; layer < tileMapLayersCount; layer++) {
             for (int x = -1; x <= 1; x++) {
@@ -119,8 +118,7 @@ public class TileMap {
                     if (!isTileOnBounds(layer, dx, dy)) continue;
 
                     Tile neighbor = tiles[dx + dy * tileMapWidth + layer * tileMapWidth * tileMapHeight];
-                    neighbor.markDirtySpriteIndex();
-                    neighbor.markDirtyBitMask();
+                    neighbor.markTileDirty();
                 }
             }
         }
