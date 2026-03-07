@@ -3,6 +3,7 @@ package dev.stonewake.rendering;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -113,5 +114,21 @@ public class Camera {
     public void setPosition(float x, float y) {
         targetX = x;
         targetY = y;
+    }
+
+    public Matrix4 getCombinedMatrix() {
+        return camera.combined;
+    }
+
+    public float getCameraX() {
+        return camera.position.x;
+    }
+
+    public float getCameraY() {
+        return camera.position.y;
+    }
+
+    public OrthographicCamera getLibGdxCamera() {
+        return camera;
     }
 }

@@ -107,4 +107,12 @@ public class BitMask {
 
         return 0;
     }
+
+    public boolean isTileSurrounded(int mask) {
+        return mask == 0xFF;
+    }
+
+    public boolean isTileOnAir(int mask) {
+        return mask == 0;
+    }
 }
