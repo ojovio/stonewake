@@ -1,11 +1,14 @@
 package dev.stonewake;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import dev.stonewake.assets.AssetManager;
 import dev.stonewake.assets.TextureManager;
 import dev.stonewake.assets.TileAssetManager;
+import dev.stonewake.rendering.Camera;
 import dev.stonewake.rendering.TileMapRenderer;
 import dev.stonewake.tiles.TileRegistry;
 import dev.stonewake.tiles.TileType;
@@ -20,6 +23,7 @@ public class Game {
     private float fixedDeltaTime = 0f;
     private float alpha = 0f;
 
+    private Camera camera;
     private TileMapRenderer tileMapRenderer;
     private AssetManager assetManager;
     private TextureManager textureManager;
@@ -29,6 +33,7 @@ public class Game {
 
     public void start() {
         spriteBatch = new SpriteBatch();
+        camera = new Camera(50, 50, 8, 0f, 1000f, 512, 256);
         tileMapRenderer = new TileMapRenderer();
         assetManager = new AssetManager();
         textureManager = new TextureManager();
@@ -43,7 +48,19 @@ public class Game {
     }
 
     public void input() {
+        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+            camera.changeZoomBy(-0.1f);
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+            camera.changeZoomBy(0.1f);
+        }
 
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            camera.changePositionBy(-5f, 0f);
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            camera.changePositionBy(5f, 0f);
+        }
     }
 
     public void update() {
@@ -51,11 +68,18 @@ public class Game {
     }
 
     public void render() {
+        camera.renderCamera(spriteBatch);
+
+        spriteBatch.begin();
         tileMapRenderer.renderOnce(this, world.getTileMap(), 0, 100, 0, 100);
     }
 
     public void dispose() {
         textureManager.dispose();
+    }
+
+    public void resize(int width, int height) {
+        camera.resizeCamera(width, height);
     }
 
     public void updateDeltaTime(float deltaTime) {
