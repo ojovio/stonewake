@@ -14,6 +14,7 @@ public class TileMapRenderer {
         TileAssetManager tileAssetManager = game.getTileAssetManager();
         TextureManager textureManager = game.getTextureManager();
         SpriteBatch spriteBatch = game.getSpriteBatch();
+        spriteBatch.setProjectionMatrix(game.getCamera().combined);
 
         for (int layer = 0; layer < tileMap.getTileMapLayersCount(); layer++) {
             for (int x = startX; x <= endX; x++) {
