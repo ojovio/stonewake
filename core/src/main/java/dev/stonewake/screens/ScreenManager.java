@@ -21,7 +21,8 @@ public class ScreenManager {
 
         screens.push(screen);
 
-        screen.show();
+        screen.load();
+        screen.start();
         screen.resume();
     }
 

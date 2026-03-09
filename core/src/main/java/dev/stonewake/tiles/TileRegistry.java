@@ -9,7 +9,7 @@ import java.io.Console;
 public class TileRegistry {
     private TileType[] tileTypes;
 
-    public TileRegistry(Class<? extends TileType>[] tileTypeClasses, TileMap tileMap) {
+    public TileRegistry(Class<? extends TileType>[] tileTypeClasses) {
         this.tileTypes = new TileType[tileTypeClasses.length];
 
         for (int i = 0; i < tileTypeClasses.length; i++) {
@@ -20,13 +20,6 @@ public class TileRegistry {
 
                 this.tileTypes[i] = instantiatedTileType;
 
-                instantiatedTileType.addTileChangeListener(new TileChangeListener() {
-                    @Override
-                    public void tileChange(TileChangeEvent tileChangeEvent) {
-                        Tile tile = tileChangeEvent.changedTile;
-                        tileMap.getChunk(tile.getParentChunkX(), tile.getParentChunkY()).updateTile(tileMap, tile);
-                    }
-                });
             } catch (Exception e) {
                 throw new RuntimeException("Erro ao instanciar Tile ID " + i, e);
             }

@@ -11,6 +11,7 @@ public abstract class GameScreen implements Screen {
         this.game = game;
     }
 
+
     public void activate() {
         active = true;
     }
@@ -22,6 +23,15 @@ public abstract class GameScreen implements Screen {
     public boolean isActive() {
         return this.active;
     }
+
+    @Override
+    public void show() {
+
+    }
+
+    public abstract void load();
+
+    public abstract  void start();
 
     public abstract void input();
 

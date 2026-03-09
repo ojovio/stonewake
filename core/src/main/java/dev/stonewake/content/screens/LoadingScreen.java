@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import dev.stonewake.Game;
+import dev.stonewake.physics.TileMapPhysicsSolver;
 import dev.stonewake.screens.GameScreen;
 
 public class LoadingScreen extends GameScreen {
@@ -11,6 +12,11 @@ public class LoadingScreen extends GameScreen {
 
     public LoadingScreen(Game game) {
         super(game);
+    }
+
+    @Override
+    public void start() {
+
     }
 
     @Override
@@ -31,8 +37,9 @@ public class LoadingScreen extends GameScreen {
     }
 
     @Override
-    public void show() {
+    public void load() {
         splashLogo = new Texture("libgdx.png");
+        TileMapPhysicsSolver p = new TileMapPhysicsSolver();
     }
 
     @Override

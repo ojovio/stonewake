@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import dev.stonewake.tiles.TileMap;
 
@@ -131,12 +130,20 @@ public class Camera {
         return camera.position.y;
     }
 
-    public int getCameraXTiles(TileMap tileMap) {
+    public int getCameraTileX(TileMap tileMap) {
         return Math.floorDiv((int)camera.position.x, tileMap.getTileSize());
     }
 
-    public int getCameraYTiles(TileMap tileMap) {
+    public int getCameraTileY(TileMap tileMap) {
         return Math.floorDiv((int)camera.position.y, tileMap.getTileSize());
+    }
+
+    public int getCameraChunkX(TileMap tileMap) {
+        return Math.floorDiv(getCameraTileX(tileMap), tileMap.getTileMapChunkWidth());
+    }
+
+    public int getCameraChunkY(TileMap tileMap) {
+        return Math.floorDiv(getCameraTileY(tileMap), tileMap.getTileMapChunkHeight());
     }
 
     public OrthographicCamera getLibGdxCamera() {

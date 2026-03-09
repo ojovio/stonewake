@@ -1,11 +1,11 @@
 package dev.stonewake.tiles;
 
 import com.badlogic.gdx.graphics.Texture;
-import dev.stonewake.assets.TileAssetManager;
 import dev.stonewake.tiles.listeners.TileChangeListener;
 import dev.stonewake.tiles.tiling.AutoTiler;
 import dev.stonewake.tiles.tiling.BitMask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TileType {
@@ -18,6 +18,7 @@ public abstract class TileType {
 
     public TileType(int tileId) {
         this.tileId = tileId;
+        this.tileChangeListeners = new ArrayList<>();
 
         setDefaults();
     }
@@ -33,11 +34,11 @@ public abstract class TileType {
     }
 
     public int getTileSpriteIndex(BitMask bitMask, Tile occupiedTile, int tileSize) {
-        if (!occupiedTile.isTileDirty()) {
+        if (!occupiedTile.isTileSpriteIndexDirty()) {
             return occupiedTile.getCachedSpriteIndex();
         }
         int spriteIndex = autoTiler.getTileSpriteIndex(bitMask, occupiedTile, tileSize);
-        occupiedTile.clearDirtyTile();
+        occupiedTile.clearDirtyTileSpriteIndex();
         occupiedTile.cacheSpriteIndex(spriteIndex);
 
         return spriteIndex;

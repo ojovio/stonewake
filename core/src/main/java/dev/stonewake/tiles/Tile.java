@@ -9,6 +9,7 @@ public class Tile {
     private final int parentChunkX;
     private final int parentChunkY;
     private boolean dirtySpriteIndex;
+    private boolean dirtyPhysics;
     private int cachedSpriteIndex = 0;
     public TileType tileType;
 
@@ -58,16 +59,28 @@ public class Tile {
         return tileType == null;
     }
 
-    public boolean isTileDirty() {
+    public boolean isTileSpriteIndexDirty() {
         return dirtySpriteIndex;
     }
 
-    public void markTileDirty() {
+    public void markTileSpriteIndexDirty() {
         dirtySpriteIndex = true;
     }
 
-    public void clearDirtyTile() {
+    public void clearDirtyTileSpriteIndex() {
         dirtySpriteIndex = false;
+    }
+
+    public boolean isDirtyPhysics() {
+        return dirtyPhysics;
+    }
+
+    public void markTilePhysicsDirty() {
+        dirtyPhysics = true;
+    }
+
+    public void clearDirtyTilePhysics() {
+        dirtyPhysics = false;
     }
 
     public int getCachedSpriteIndex() {

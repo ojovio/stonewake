@@ -63,17 +63,19 @@ public class TileChunk {
         for (TileChangeListener tileChangeListener : tile.tileType.getTileChangeListeners()) {
             tileChangeListener.tileChange(new TileChangeEvent(tile, tileChangeEventType, lastTileType, tile.tileType));
         }
+
+        updateTile(tileMap, tile);
     }
 
     public void clearTile(TileMap tileMap, int tileLayer, int tileChunkX, int tileChunkY) {
         Tile tile = tiles[TileUtils.codifyTilePosition(tileMap, tileLayer, tileChunkX, tileChunkY)];
         TileType lastTileType = tile.tileType;
 
-        tile.tileType = null;
-
         for (TileChangeListener tileChangeListener : tile.tileType.getTileChangeListeners()) {
             tileChangeListener.tileChange(new TileChangeEvent(tile, TileChangeEventType.CLEAR_TILE, lastTileType, null));
         }
+
+        tile.tileType = null;
     }
 
     public Tile getTileFromWorld(TileMap tileMap, int tileLayer, int tileX, int tileY) {
@@ -95,7 +97,8 @@ public class TileChunk {
     }
 
     public void updateTile(TileMap tileMap, Tile tile) {
-        tile.markTileDirty();
+        tile.markTileSpriteIndexDirty();
+        tile.markTilePhysicsDirty();
 
         for (int layer = 0; layer < tileMap.getTileMapLayersCount(); layer++) {
             for (int dX = -1; dX <= 1; dX++) {
@@ -126,12 +129,14 @@ public class TileChunk {
 
                         if (!tileMap.isChunkOnBounds(chunkX + chunkdX, chunkY + chunkdY)) continue;
 
-                        tileMap.getChunk(chunkX + chunkdX, chunkY + chunkdY).getTile(tileMap, layer, x, y).markTileDirty();
+                        tileMap.getChunk(chunkX + chunkdX, chunkY + chunkdY).getTile(tileMap, layer, x, y).markTileSpriteIndexDirty();
 
                         continue;
                     }
 
-                    tiles[TileUtils.codifyTilePosition(tileMap, layer, x, y)].markTileDirty();
+                    Tile neighbor = tiles[TileUtils.codifyTilePosition(tileMap, layer, x, y)];
+                    neighbor.markTileSpriteIndexDirty();
+                    neighbor.markTilePhysicsDirty();
                 }
             }
         }
