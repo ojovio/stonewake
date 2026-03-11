@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TextureManager {
-    private Map<String, Texture> textures = new HashMap<>();
+    private HashMap<String, Texture> textures = new HashMap<>();
 
     public void loadTextures(String[] textures) {
         for (String texture : textures) {

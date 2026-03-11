@@ -55,6 +55,10 @@ public abstract class GameController {
         return fixedDeltaTime;
     }
 
+    public float getDeltaTime() {
+        return deltaTime;
+    }
+
     public void updateDeltaTime(float dt) {
         deltaTime = dt;
     }

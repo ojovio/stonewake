@@ -1,6 +1,7 @@
 package dev.stonewake.utils;
 
 import com.badlogic.gdx.graphics.Texture;
+import dev.stonewake.tiles.Tile;
 import dev.stonewake.tiles.TileMap;
 import dev.stonewake.tiles.TileType;
 
@@ -14,7 +15,7 @@ public class TileUtils {
     }
 
     public static int codifyTileSpriteIndex(int spriteX, int spriteY, TileType tileType, int tileSize) {
-        int columns = tileType.getTileTexture().getWidth() / tileSize;
+        int columns = tileType.getCachedTileTexture().getWidth() / tileSize;
         return spriteY * columns + spriteX;
     }
 
@@ -24,27 +25,6 @@ public class TileUtils {
         int rowOffset = y * tileMap.getTileMapChunkWidth();
 
         return x + rowOffset + layerOffset;
-    }
-
-    public static int decodifyTileLayer(TileMap tileMap, int index) {
-        int layerSize = tileMap.getTileMapChunkWidth() * tileMap.getTileMapChunkHeight();
-        return index / layerSize;
-    }
-
-    public static int decodifyTileX(TileMap tileMap, int index) {
-        int chunkWidth = tileMap.getTileMapChunkWidth();
-        int layerSize = chunkWidth * tileMap.getTileMapChunkHeight();
-
-        int indexInLayer = index % layerSize;
-        return indexInLayer % chunkWidth;
-    }
-
-    public static int decodifyTileY(TileMap tileMap, int index) {
-        int chunkWidth = tileMap.getTileMapChunkWidth();
-        int layerSize = chunkWidth * tileMap.getTileMapChunkHeight();
-
-        int indexInLayer = index % layerSize;
-        return indexInLayer / chunkWidth;
     }
 
     public static int codifyWorldTilePosition(TileMap tileMap, int layer, int x, int y) {
@@ -81,5 +61,13 @@ public class TileUtils {
 
         long indexInLayer = index % layerSize;
         return (int)indexInLayer / worldWidth;
+    }
+
+    public static int getTileChunkX(TileMap tileMap, int tileX) {
+        return tileX % tileMap.getTileMapChunkWidth();
+    }
+
+    public static int getTileChunkY(TileMap tileMap, int tileY) {
+        return tileY % tileMap.getTileMapChunkHeight();
     }
 }

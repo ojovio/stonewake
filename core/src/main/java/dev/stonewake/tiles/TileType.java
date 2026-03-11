@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TileType {
-    private int tileId;
-    private Texture tileTexture;
+    private short tileId;
+    private Texture cachedTileTexture;
     protected AutoTiler autoTiler;
     protected String tileSprite;
 
     private List<TileChangeListener> tileChangeListeners;
 
-    public TileType(int tileId) {
+    public TileType(short tileId) {
         this.tileId = tileId;
         this.tileChangeListeners = new ArrayList<>();
 
@@ -25,7 +25,7 @@ public abstract class TileType {
 
     public abstract void setDefaults();
 
-    public int getTileId() {
+    public short getTileId() {
         return tileId;
     }
 
@@ -33,11 +33,11 @@ public abstract class TileType {
         return tileSprite;
     }
 
-    public int getTileSpriteIndex(BitMask bitMask, Tile occupiedTile, int tileSize) {
+    public int getTileSpriteIndex(TileMap tileMap, Tile occupiedTile, int tileSize) {
         if (!occupiedTile.isTileSpriteIndexDirty()) {
             return occupiedTile.getCachedSpriteIndex();
         }
-        int spriteIndex = autoTiler.getTileSpriteIndex(bitMask, occupiedTile, tileSize);
+        int spriteIndex = autoTiler.getTileSpriteIndex(tileMap, occupiedTile, tileSize);
         occupiedTile.clearDirtyTileSpriteIndex();
         occupiedTile.cacheSpriteIndex(spriteIndex);
 
@@ -45,11 +45,11 @@ public abstract class TileType {
     }
 
     public void loadTileTexture(Texture texture) {
-        tileTexture = texture;
+        cachedTileTexture = texture;
     }
 
-    public Texture getTileTexture() {
-        return tileTexture;
+    public Texture getCachedTileTexture() {
+        return cachedTileTexture;
     }
 
     public List<TileChangeListener> getTileChangeListeners() {

@@ -2,13 +2,9 @@ package dev.stonewake.rendering;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import dev.stonewake.Game;
 import dev.stonewake.assets.TextureManager;
 import dev.stonewake.assets.TileAssetManager;
-import dev.stonewake.tiles.Tile;
-import dev.stonewake.tiles.TileChunk;
-import dev.stonewake.tiles.TileMap;
-import dev.stonewake.tiles.TileType;
+import dev.stonewake.tiles.*;
 import dev.stonewake.utils.TileUtils;
 
 public class TileMapRenderer {
@@ -29,16 +25,19 @@ public class TileMapRenderer {
                             Tile tileToBeRendered = chunk.getTile(tileMap, layer, x, y);
                             if (tileToBeRendered.isTileAir()) continue;
 
-                            TileType tileType = tileToBeRendered.tileType;
-                            Texture tileTexture = tileType.getTileTexture();
-                            int tileSpriteIndex = tileType.getTileSpriteIndex(tileMap.getBitMask(), tileToBeRendered, tileSize);
+                            TileType tileType = tileMap.getTileRegistry().getRegisteredTileType(tileToBeRendered.tileType);
+                            Texture tileTexture = tileType.getCachedTileTexture();
+                            int tileSpriteIndex = tileType.getTileSpriteIndex(tileMap, tileToBeRendered, tileSize);
                             int tileSpriteX = TileUtils.decodifyTileSpriteIndexX(tileSpriteIndex, tileTexture, tileSize);
                             int tileSpriteY = TileUtils.decodifyTileSpriteIndexY(tileSpriteIndex, tileTexture, tileSize);
 
+                            int worldX = tileToBeRendered.getTileX(tileMap) * tileSize;
+                            int worldY = tileToBeRendered.getTileY(tileMap) * tileSize;
+
                             spriteBatch.draw(
                                     tileTexture,
-                                    tileToBeRendered.getTileX() * tileSize,
-                                    tileToBeRendered.getTileY() * tileSize,
+                                    worldX,
+                                    worldY,
                                     tileSize,
                                     tileSize,
                                     tileSpriteX,

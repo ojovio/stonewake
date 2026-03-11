@@ -9,8 +9,8 @@ import java.util.HashSet;
 
 public class GrassTile extends TileType {
 
-    public GrassTile(int tileId) {
-        super(tileId);
+    public GrassTile() {
+        super((short) 0);
     }
 
     @Override

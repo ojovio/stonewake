@@ -1,36 +1,24 @@
 package dev.stonewake.tiles;
 
-import dev.stonewake.tiles.events.TileChangeEvent;
-import dev.stonewake.tiles.listeners.TileChangeListener;
-import jdk.vm.ci.meta.Constant;
-
-import java.io.Console;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class TileRegistry {
-    private TileType[] tileTypes;
+    private HashMap<Short, TileType> tileTypes;
 
-    public TileRegistry(Class<? extends TileType>[] tileTypeClasses) {
-        this.tileTypes = new TileType[tileTypeClasses.length];
-
-        for (int i = 0; i < tileTypeClasses.length; i++) {
-            try {
-                TileType instantiatedTileType = tileTypeClasses[i]
-                    .getDeclaredConstructor(int.class)
-                    .newInstance(i);
-
-                this.tileTypes[i] = instantiatedTileType;
-
-            } catch (Exception e) {
-                throw new RuntimeException("Error instancing Tile Type with id: " + i, e);
-            }
-        }
+    public TileRegistry() {
+        this.tileTypes = new HashMap<>();
     }
 
-    public TileType getTileType(int tileId) {
-        return tileTypes[tileId];
+    public void registerTileType(TileType tileType) {
+        tileTypes.put(tileType.getTileId(), tileType);
     }
 
-    public TileType[] getTileTypes() {
-        return tileTypes;
+    public TileType getRegisteredTileType(short tileId) {
+        return tileTypes.get(tileId);
+    }
+
+    public Collection<TileType> getRegisteredTileTypes() {
+        return tileTypes.values();
     }
 }

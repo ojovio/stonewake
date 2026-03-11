@@ -1,5 +1,6 @@
 package dev.stonewake.entities;
 
+import com.badlogic.gdx.physics.box2d.Body;
 import dev.stonewake.GameController;
 import dev.stonewake.entities.listeners.EntitySpawnListener;
 
@@ -10,8 +11,8 @@ public abstract class Entity {
     private static int nextUniqueId = 0;
 
     private int uniqueEntityId;
-    protected float entityX;
-    protected float entityY;
+    protected Body entityBody;
+    protected float entityTime;
 
     private List<EntitySpawnListener> entitySpawnListeners;
 
@@ -19,26 +20,37 @@ public abstract class Entity {
         entitySpawnListeners = new ArrayList<>();
         setDefaults();
 
-        this.entityX = entityX;
-        this.entityY = entityY;
+        entityBody.setTransform(entityX, entityY, 0);
 
         this.uniqueEntityId = nextUniqueId++;
     }
 
     public abstract void setDefaults();
 
-    public abstract void start();
+    public abstract void start(GameController game);
 
     public abstract void update(GameController game);
 
     public abstract void dispose();
 
+    public void updateEntityTime(float deltaTime) {
+        entityTime += deltaTime;
+    }
+
+    public void applyLinearVelocity(float vx, float vy) {
+        entityBody.setLinearVelocity(vx, vy);
+    }
+
+    public void applyAngularVelocity(float omega) {
+        entityBody.setAngularVelocity(omega);
+    }
+
     public float getEntityX() {
-        return entityX;
+        return entityBody.getPosition().x;
     }
 
     public float getEntityY() {
-        return entityY;
+        return entityBody.getPosition().y;
     }
 
     public int getUniqueEntityId() {
@@ -48,6 +60,4 @@ public abstract class Entity {
     public List<EntitySpawnListener> getEntitySpawnListeners() {
         return entitySpawnListeners;
     }
-
-    public abstract int getEntityTypeId();
 }

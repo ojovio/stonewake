@@ -1,8 +1,5 @@
 package dev.stonewake.assets;
 
-import com.badlogic.gdx.graphics.Texture;
-import dev.stonewake.Game;
-import dev.stonewake.tiles.Tile;
 import dev.stonewake.tiles.TileMap;
 import dev.stonewake.tiles.TileRegistry;
 import dev.stonewake.tiles.TileType;
@@ -15,15 +12,15 @@ public class TileAssetManager {
     }
 
     public void loadTileTextures(TileRegistry tileRegistry, TextureManager textureManager) {
-        String[] tileTextures = new String[tileRegistry.getTileTypes().length];
+        String[] tileSprites = new String[tileRegistry.getRegisteredTileTypes().size()];
 
-        for (TileType tileType : tileRegistry.getTileTypes()) {
-            tileTextures[tileType.getTileId()] = tileType.getTileSprite();
+        for (TileType tileType : tileRegistry.getRegisteredTileTypes()) {
+            tileSprites[tileType.getTileId()] = tileType.getTileSprite();
         }
 
-        textureManager.loadTextures(tileTextures);
+        textureManager.loadTextures(tileSprites);
 
-        for (TileType tileType : tileRegistry.getTileTypes()) {
+        for (TileType tileType : tileRegistry.getRegisteredTileTypes()) {
             tileType.loadTileTexture(textureManager.getTexture(tileType.getTileSprite()));
         }
     }

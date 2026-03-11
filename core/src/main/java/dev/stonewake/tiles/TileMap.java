@@ -4,16 +4,17 @@ import dev.stonewake.tiles.tiling.BitMask;
 
 public class TileMap {
     private final int tileMapLayersCount;
-    private final int tileMapWidthInChunks;
-    private final int tileMapHeightInChunks;
+    private final short tileMapWidthInChunks;
+    private final short tileMapHeightInChunks;
     private final int tileMapChunkWidth;
     private final int tileMapChunkHeight;
     private final int tileSize;
-    private final TileRegistry tileRegistry;
     private final BitMask bitMask;
     private final TileChunk[][] chunks;
+    private TileRegistry tileRegistry;
 
-    public TileMap(int tileMapLayersCount, int tileMapWidthInChunks, int tileMapHeightInChunks, int tileMapChunkWidth, int tileMapChunkHeight, int tileSize, Class<TileType>[] tileTypes) {
+    public TileMap(TileRegistry tileRegistry, int tileMapLayersCount, short tileMapWidthInChunks, short tileMapHeightInChunks, int tileMapChunkWidth, int tileMapChunkHeight, int tileSize) {
+        this.tileRegistry = tileRegistry;
         this.tileMapLayersCount = tileMapLayersCount;
         this.tileMapWidthInChunks = tileMapWidthInChunks;
         this.tileMapHeightInChunks = tileMapHeightInChunks;
@@ -21,12 +22,11 @@ public class TileMap {
         this.tileMapChunkHeight = tileMapChunkHeight;
         this.tileSize = tileSize;
 
-        tileRegistry = new TileRegistry(tileTypes);
         bitMask = new BitMask(this);
         chunks = new TileChunk[tileMapWidthInChunks][tileMapHeightInChunks];
 
-        for (int x = 0; x < tileMapWidthInChunks; x++) {
-            for (int y = 0; y < tileMapHeightInChunks; y++) {
+        for (short x = 0; x < tileMapWidthInChunks; x++) {
+            for (short y = 0; y < tileMapHeightInChunks; y++) {
                 chunks[x][y] = new TileChunk(this, x, y);
             }
         }
@@ -71,14 +71,6 @@ public class TileMap {
         return chunks[chunkX][chunkY].getTileFromWorld(this, tileLayer, tileX, tileY);
     }
 
-    public void setTile(int chunkX, int chunkY, int tileLayer, int tileChunkX, int tileChunkY, int tileId) {
-        getTile(chunkX, chunkY, tileLayer, tileChunkX, tileChunkY).tileType = tileRegistry.getTileType(tileId);
-    }
-
-    public void setTile(int tileLayer, int tileX, int tileY, int tileId) {
-        getTile(tileLayer, tileX, tileY).tileType = tileRegistry.getTileType(tileId);
-    }
-
     public int getChunkX(int tileX) {
         return Math.floorDiv(tileX, tileMapChunkWidth);
     }
@@ -107,11 +99,11 @@ public class TileMap {
         return tileMapChunkHeight;
     }
 
-    public int getTileMapWidthInChunks() {
+    public short getTileMapWidthInChunks() {
         return tileMapWidthInChunks;
     }
 
-    public int getTileMapHeightInChunks() {
+    public short getTileMapHeightInChunks() {
         return tileMapHeightInChunks;
     }
 

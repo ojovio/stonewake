@@ -1,93 +1,86 @@
 package dev.stonewake.tiles;
 
 public class Tile {
-    private final int tileLayer;
-    private final int tileX;
-    private final int tileY;
-    private final int tileChunkX;
-    private final int tileChunkY;
-    private final int parentChunkX;
-    private final int parentChunkY;
-    private boolean dirtySpriteIndex;
-    private boolean dirtyPhysics;
-    private int cachedSpriteIndex = 0;
-    public TileType tileType;
+    private final byte tileChunkX;
+    private final byte tileChunkY;
+    private final short parentChunk;
+    private byte flags;
+    private byte cachedSpriteIndex = 0;
+    public short tileType;
 
-    public Tile(int tileLayer, int tileX, int tileY, int tileChunkX, int tileChunkY, int parentChunkX, int parentChunkY) {
-        this.tileLayer = tileLayer;
-        this.tileX = tileX;
-        this.tileY = tileY;
-        this.tileChunkX = tileChunkX;
-        this.tileChunkY = tileChunkY;
-        this.parentChunkX = parentChunkX;
-        this.parentChunkY = parentChunkY;
-    }
-
-    public int getTileLayer() {
-        return tileLayer;
-    }
-
-    public int getTileX() {
-        return tileX;
-    }
-
-    public int getTileY() {
-        return tileY;
-    }
-
-    public int getTileChunkX() {
-        return tileChunkX;
-    }
-
-    public int getTileChunkY() {
-        return tileChunkY;
-    }
-
-    public int getParentChunkX() {
-        return parentChunkX;
-    }
-
-    public int getParentChunkY() {
-        return parentChunkY;
+    public Tile(int tileLayer, int tileChunkX, int tileChunkY, short parentChunkX, short parentChunkY) {
+        this.tileType = -1;
+        this.flags = (byte)((0) | ((tileLayer & 0b00001111) << 2));
+        this.tileChunkX = (byte)tileChunkX;
+        this.tileChunkY = (byte)tileChunkY;
+        this.parentChunk = (short)((parentChunkX & 0xFF) << 8 | (parentChunkY & 0xFF));
     }
 
     public boolean isTileOccupied() {
-        return tileType != null;
+        return tileType != -1;
     }
 
     public boolean isTileAir() {
-        return tileType == null;
+        return tileType == -1;
     }
 
     public boolean isTileSpriteIndexDirty() {
-        return dirtySpriteIndex;
+        return (flags & 0b00000001) != 0;
     }
 
     public void markTileSpriteIndexDirty() {
-        dirtySpriteIndex = true;
+        flags |= 0b00000001;
     }
 
     public void clearDirtyTileSpriteIndex() {
-        dirtySpriteIndex = false;
+        flags &= ~0b00000001;
     }
 
     public boolean isDirtyPhysics() {
-        return dirtyPhysics;
+        return (flags & 0b00000010) != 0;
     }
 
     public void markTilePhysicsDirty() {
-        dirtyPhysics = true;
+        flags |= 0b00000010;
     }
 
     public void clearDirtyTilePhysics() {
-        dirtyPhysics = false;
+        flags &= ~0b00000010;
     }
 
     public int getCachedSpriteIndex() {
-        return cachedSpriteIndex;
+        return cachedSpriteIndex & 0xFF;
     }
 
     public void cacheSpriteIndex(int spriteIndex) {
-        cachedSpriteIndex = spriteIndex;
+        cachedSpriteIndex = (byte)spriteIndex;
+    }
+
+    public int getTileLayer() {
+        return (flags >> 2) & 0b00001111;
+    }
+
+    public int getTileChunkX() {
+        return tileChunkX & 0xFF;
+    }
+
+    public int getTileChunkY() {
+        return tileChunkY & 0xFF;
+    }
+
+    public short getParentChunkX() {
+        return (short)((parentChunk >> 8) & 0xFF);
+    }
+
+    public short getParentChunkY() {
+        return (short)(parentChunk & 0xFF);
+    }
+
+    public int getTileX(TileMap tileMap) {
+        return getParentChunkX() * tileMap.getTileMapChunkWidth() + tileChunkX;
+    }
+
+    public int getTileY(TileMap tileMap) {
+        return getParentChunkY() * tileMap.getTileMapChunkHeight() + tileChunkY;
     }
 }

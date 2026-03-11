@@ -6,8 +6,6 @@ public abstract class LivingEntity extends Entity {
     protected int entityDefense;
     protected int entityInvulnerabilityTime;
     protected int entityMaxInvulnerabilityTime;
-    protected float velocityX;
-    protected float velocityY;
 
     public LivingEntity(float entityX, float entityY) {
         super(entityX, entityY);
@@ -40,10 +38,5 @@ public abstract class LivingEntity extends Entity {
 
     public boolean isAlive() {
         return entityHealth > 0;
-    }
-
-    public void updateEntityPosition(float fixedDeltaTime) {
-        entityX += velocityX;
-        entityY += velocityY;
     }
 }

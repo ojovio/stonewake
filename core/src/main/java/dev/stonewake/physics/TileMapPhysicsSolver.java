@@ -125,9 +125,8 @@ public class TileMapPhysicsSolver {
     }
 
     public Body mapTilePhysics(TileMap tileMap, Tile tile, World physicsWorld, int mask) {
-
-        int x = tile.getTileX();
-        int y = tile.getTileY();
+        int x = tile.getTileX(tileMap);
+        int y = tile.getTileY(tileMap);
 
         float tileSize = tileMap.getTileSize();
 

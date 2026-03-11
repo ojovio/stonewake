@@ -25,8 +25,8 @@ public class BitMask {
     public int calculateBitMask(Tile tile, int layer, boolean considerWorldBorders, Predicate<Tile> condition) {
         int mask = 0;
 
-        int tileX = tile.getTileX();
-        int tileY = tile.getTileY();
+        int tileX = tile.getTileX(tileMap);
+        int tileY = tile.getTileY(tileMap);
 
         for (int dy = -1; dy <= 1; dy++) {
             for (int dx = -1; dx <= 1; dx++) {

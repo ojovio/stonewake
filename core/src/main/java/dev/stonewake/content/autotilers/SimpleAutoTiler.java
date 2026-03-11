@@ -1,6 +1,8 @@
 package dev.stonewake.content.autotilers;
 
 import dev.stonewake.tiles.Tile;
+import dev.stonewake.tiles.TileMap;
+import dev.stonewake.tiles.TileRegistry;
 import dev.stonewake.tiles.tiling.AutoTiler;
 import dev.stonewake.tiles.tiling.BitMask;
 import dev.stonewake.content.comparers.ThreeBitMaskComparer;
@@ -9,14 +11,15 @@ import dev.stonewake.utils.TileUtils;
 import java.util.Set;
 
 public class SimpleAutoTiler extends AutoTiler {
-    public SimpleAutoTiler(Set<Integer> connectableTileIds, int numVariants) {
+    public SimpleAutoTiler(Set<Short> connectableTileIds, int numVariants) {
         super(connectableTileIds, numVariants, 1);
 
         this.addBitMaskComparer(0, new ThreeBitMaskComparer());
     }
 
     @Override
-    public int getTileSpriteIndex(BitMask bm, Tile occupiedTile, int tileSize) {
+    public int getTileSpriteIndex(TileMap tileMap, Tile occupiedTile, int tileSize) {
+        BitMask bm = tileMap.getBitMask();
         int mask = bm.calculateBitMask(occupiedTile, false);
         ThreeBitMaskComparer comparer = (ThreeBitMaskComparer) getBitMaskComparer(0);
         int sX, sY;
@@ -94,7 +97,6 @@ public class SimpleAutoTiler extends AutoTiler {
             sX = 2; sY = 1;
         }
 
-        int variant = this.getDeterministicVariant(occupiedTile);
-        return TileUtils.codifyTileSpriteIndex(sX, sY, occupiedTile.tileType, tileSize);
+        return TileUtils.codifyTileSpriteIndex(sX, sY, tileMap.getTileRegistry().getRegisteredTileType(occupiedTile.tileType), tileSize);
     }
 }

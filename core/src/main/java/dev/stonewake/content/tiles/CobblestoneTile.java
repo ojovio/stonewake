@@ -7,8 +7,8 @@ import java.util.HashSet;
 
 public class CobblestoneTile extends TileType {
 
-    public CobblestoneTile(int tileId) {
-        super(tileId);
+    public CobblestoneTile() {
+        super((short) 1);
     }
 
     @Override

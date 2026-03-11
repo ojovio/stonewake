@@ -10,12 +10,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class EntityManager {
+    private GameController game;
     private HashMap<Integer, Entity> activeEntities;
     private List<Integer> entitiesToRemove;
 
-    public EntityManager() {
+    public EntityManager(GameController game) {
         activeEntities = new HashMap<>();
         entitiesToRemove = new ArrayList<>();
+        this.game = game;
     }
 
     public void addEntity(Entity entity) {
@@ -25,7 +27,7 @@ public class EntityManager {
             entitySpawnListener.entitySpawned(new EntitySpawnEvent(entity, entity.getEntityX(), entity.getEntityY()));
         }
 
-        entity.start();
+        entity.start(game);
     }
 
     public Entity getEntity(int uniqueEntityId) {
@@ -40,15 +42,19 @@ public class EntityManager {
         return activeEntities.values();
     }
 
-    public void updateEntities(GameController game) {
+    public void updateEntities() {
         for (Entity e : activeEntities.values()) {
-            if (e instanceof LivingEntity && !((LivingEntity) e).isAlive()) {
-                removeEntity(e.getUniqueEntityId());
+            if (e instanceof LivingEntity) {
+                LivingEntity living = (LivingEntity)e;
+                if (!living.isAlive()) {
+                    removeEntity(e.getUniqueEntityId());
 
-                continue;
+                    continue;
+                }
             }
 
             e.update(game);
+            e.updateEntityTime(game.getDeltaTime());
         }
         for (Integer id : entitiesToRemove) {
             Entity e = activeEntities.get(id);
@@ -58,6 +64,5 @@ public class EntityManager {
         }
 
         entitiesToRemove.clear();
-
     }
 }
