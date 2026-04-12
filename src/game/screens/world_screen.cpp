@@ -92,8 +92,6 @@ void WorldScreen::onEnter() {
 
                     float moisture = gen.getHumidityNoise(gx, gy);
 
-                    // Condição: Se a umidade for alta E estivermos abaixo de certa profundidade
-                    // Ou se for uma depressão específica
                     if (moisture > 0.75f && gy > 40) {
                         chunk.setCell(TileLayer::GROUND, x, y, tileRegistry.getInternalId("stonewake:water"));
                     }
