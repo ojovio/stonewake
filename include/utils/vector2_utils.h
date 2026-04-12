@@ -1,0 +1,8 @@
+//
+// Created by j-otavio on 12/04/2026.
+//
+
+#ifndef STONEWAKE_VECTOR2_UTILS_H
+#define STONEWAKE_VECTOR2_UTILS_H
+
+#endif //STONEWAKE_VECTOR2_UTILS_H
